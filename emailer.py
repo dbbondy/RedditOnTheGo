@@ -28,7 +28,7 @@ def email():
 
         smtp.sendmail(SENDER, SENDER, msg.as_string())
 
-
+# TODO pull SMTP settings from creds.txt, rather than bake them in.
 
 def __strip_value__(line):
     index = line.index('=') + 1
