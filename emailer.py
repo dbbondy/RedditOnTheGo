@@ -1,14 +1,33 @@
+SENDER = 'db_bondy@hotmail.com'
+
+
 from os.path import expanduser
-from os import listdir
 from os import chdir
 from glob import glob
+from smtplib import SMTP
+from email.mime.text import MIMEText
+
 
 __name__ = 'emailer'
 __author__ = 'Dan'
 
 
 def email():
-    pass
+    msg = MIMEText("This is a test message for a test email.")
+    msg['Subject'] = "This is an email sent from Python!"
+    msg['From'] = 'db_bondy@hotmail.com'
+
+    creds = __obtain_creds__()
+
+    with SMTP('smtp-mail.outlook.com', '587') as smtp:
+        smtp.set_debuglevel(False)
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+        smtp.login(creds[0], creds[1])
+
+        smtp.sendmail(SENDER, SENDER, msg.as_string())
+
 
 
 def __strip_value__(line):
