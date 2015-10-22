@@ -1,6 +1,7 @@
 import praw
 from pprint import pprint
-import Email
+
+from emailer import email
 
 __author__ = 'Dan'
 
