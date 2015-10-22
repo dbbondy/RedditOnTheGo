@@ -5,16 +5,17 @@ from emailer import email
 
 __author__ = 'Dan'
 
-r = praw.Reddit(user_agent='Testing reddit API for Dan B.')
+#r = praw.Reddit(user_agent='Testing reddit API for Dan B.')
 
-submissions = r.get_subreddit('starcraft').get_hot(limit=10)
+#submissions = r.get_subreddit('starcraft').get_hot(limit=10)
 
-links = {}
-for submission in submissions:
-    links[str(submission)] = str(submission.url)
+#links = {}
+#for submission in submissions:
+    #links[str(submission)] = str(submission.url)
 
-pprint(links)
+#pprint(links)
 
+email()
 
 ##TODO: now build up email and send it out.
 
