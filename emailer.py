@@ -1,12 +1,10 @@
-SENDER = 'db_bondy@hotmail.com'
-
-
 from os.path import expanduser
 from os import chdir
 from glob import glob
 from smtplib import SMTP
 from email.mime.text import MIMEText
 
+SENDER = 'db_bondy@hotmail.com'
 
 __name__ = 'emailer'
 __author__ = 'Dan'
@@ -19,16 +17,21 @@ def email():
 
     creds = __obtain_creds__()
 
-    with SMTP('smtp-mail.outlook.com', '587') as smtp:
+    smtp_addr = creds['smtp']
+    smtp_port = creds['smtp_port']
+
+    with SMTP(smtp_addr, smtp_port) as smtp:
         smtp.set_debuglevel(False)
         smtp.ehlo()
         smtp.starttls()
         smtp.ehlo()
-        smtp.login(creds[0], creds[1])
+
+        username = creds['u_name']
+        password = creds['p_word']
+        smtp.login(username, password)
 
         smtp.sendmail(SENDER, SENDER, msg.as_string())
 
-# TODO pull SMTP settings from creds.txt, rather than bake them in.
 
 def __strip_value__(line):
     index = line.index('=') + 1
@@ -43,13 +46,16 @@ def __obtain_creds__():
     if creds_file:
         with open(creds_file[0]) as file:
             lines = file.read().splitlines()
-            u_name = __strip_value__(lines[0])
-            p_word = __strip_value__(lines[1])
+            smtp = __strip_value__(lines[0])
+            smtp_port = __strip_value__(lines[1])
+            u_name = __strip_value__(lines[2])
+            p_word = __strip_value__(lines[3])
 
-            return u_name, p_word
+            creds = {'smtp' : smtp, 'smtp_port' : smtp_port, 'u_name': u_name, 'p_word' : p_word}
+
+            return creds
     else:
         error = 'No Credentials file found in {0}'.format(home)
         raise OSError(error)
-
 
 # TODO: https://docs.python.org/3.5/library/email-examples.html
